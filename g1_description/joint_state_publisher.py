@@ -71,13 +71,13 @@ class UnitreeROS2hgJointState(Node):
 
         self.low_state_subscriber = self.create_subscription(
             LowState,
-            '/low_state',
+            '/lowstate',
             self.low_state_callback,
             10,
         )
         self.imu_state_subscriber = self.create_subscription(
             IMUState,
-            '/secandary_imu',
+            '/secondary_imu',
             self.imu_state_callback,
             10,
         )
@@ -89,12 +89,12 @@ class UnitreeROS2hgJointState(Node):
             self.get_logger().info("Publishing fake states", once=True)
             self.fake_joint_state_publisher = self.create_publisher(
                 LowState,
-                '/low_state',
+                '/lowstate',
                 10,
             )
             self.fake_imu_state_publisher = self.create_publisher(
                 IMUState,
-                '/secandary_imu',
+                '/secondary_imu',
                 10,
             )
             self.create_timer(0.002, self.publish_fake_states_callback) # 500Hz
