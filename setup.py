@@ -13,7 +13,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + "/urdf", glob('urdf/*')),
         ('share/' + package_name + "/config", ['config/check_joints.rviz']),
-        ('share/' + package_name + "/launch", ['launch/display.py']),
+        ('share/' + package_name + "/launch", glob('launch/*')),
         ('share/' + package_name + "/meshes", glob('meshes/*')),
         ('share/' + package_name + "/g1_description", glob('g1_description/*')),
     ],
