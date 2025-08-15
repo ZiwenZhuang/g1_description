@@ -54,6 +54,50 @@ class RobotCfgs:
             https://github.com/unitreerobotics/unitree_ros/tree/master/robots/g1_description
         """
 
+    class G1_23Dof_TorsoBase:
+        NUM_DOF = 23
+        NUM_ACTIONS = 23
+        joint_names = [  # NOTE: order matters. This list is the order in real robot.
+            "left_hip_pitch_joint",
+            "left_hip_roll_joint",
+            "left_hip_yaw_joint",
+            "left_knee_joint",
+            "left_ankle_pitch_joint",
+            "left_ankle_roll_joint",
+            "right_hip_pitch_joint",
+            "right_hip_roll_joint",
+            "right_hip_yaw_joint",
+            "right_knee_joint",
+            "right_ankle_pitch_joint",
+            "right_ankle_roll_joint",
+            "waist_yaw_joint",
+            "waist_roll_joint",
+            "waist_pitch_joint",
+            "left_shoulder_pitch_joint",
+            "left_shoulder_roll_joint",
+            "left_shoulder_yaw_joint",
+            "left_elbow_joint",
+            "left_wrist_roll_joint",
+            "left_wrist_pitch_joint",
+            "left_wrist_yaw_joint",
+            "right_shoulder_pitch_joint",
+            "right_shoulder_roll_joint",
+            "right_shoulder_yaw_joint",
+            "right_elbow_joint",
+            "right_wrist_roll_joint",
+            "right_wrist_pitch_joint",
+            "right_wrist_yaw_joint",
+        ]
+        joint_signs = [1] * 29
+        joint_signs[12] = -1  # waist_yaw_joint is reversed
+        joint_signs[13] = 0  # waist_roll_joint is not used
+        joint_signs[14] = 0  # waist_pitch_joint is not used
+        joint_signs[20] = 0  # left_wrist_yaw_joint is not used
+        joint_signs[21] = 0  # right_wrist_yaw_joint is not used
+        joint_signs[27] = 0  # right_wrist_yaw_joint is not used
+        joint_signs[28] = 0  # right_wrist_yaw_joint is not used
+
+
 
 class UnitreeROS2hgJointState(Node):
     def __init__(self):
@@ -67,7 +111,8 @@ class UnitreeROS2hgJointState(Node):
         )
         self.tf_broadcaster = TransformBroadcaster(self)
 
-        self.robot_class = RobotCfgs.G1_29Dof_TorsoBase # TODO: make this configurable from ros params
+        robot_model_ = self.declare_parameter('robot_model', "29").get_parameter_value().string_value
+        self.robot_class = getattr(RobotCfgs, f'G1_{robot_model_}Dof_TorsoBase', None)
 
         self.low_state_subscriber = self.create_subscription(
             LowState,
